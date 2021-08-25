@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "./SafeMath.sol";
 
-contract Token {
-    using SafeMath for uint256;
+contract MyToken {
+    // using SafeMath for uint256;
     string public name = "MyToken";
     string public symbol = "MTO";
     uint public decimals = 18;
@@ -20,8 +21,7 @@ contract Token {
     );
     event Transfer(address indexed from, address indexed to, uint256 tokens);
 
-    constructor(uint256 total) {
-        totalSupply = total;
+    constructor() {
         balanceOf[msg.sender] = totalSupply;
     }
 
@@ -31,8 +31,8 @@ contract Token {
     {
         require(_value <= balanceOf[msg.sender]);
 
-        balanceOf[msg.sender] = balanceOf[msg.sender].sub(_value);
-        balanceOf[_to] = balanceOf[_to].add(_value);
+        balanceOf[msg.sender] = balanceOf[msg.sender] -_value;
+        balanceOf[_to] = balanceOf[_to] + _value;
 
         emit Transfer(msg.sender, _to, _value);
         return true;
@@ -46,9 +46,9 @@ contract Token {
         require(_value <= balanceOf[_from]);
         require(_value <= allowance[_from][_to]);
 
-        balanceOf[_from] = balanceOf[_from].sub(_value);
-        balanceOf[_to] = balanceOf[_to].add(_value);
-        allowance[_from][_to] = allowance[_from][_to].sub(_value);
+        balanceOf[_from] = balanceOf[_from] - _value;
+        balanceOf[_to] = balanceOf[_to] + _value;
+        allowance[_from][_to] = allowance[_from][_to] - _value;
 
         emit Transfer(_from, _to, _value);
         return true;
